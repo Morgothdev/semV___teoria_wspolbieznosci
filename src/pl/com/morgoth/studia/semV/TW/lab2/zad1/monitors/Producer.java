@@ -27,6 +27,7 @@ public class Producer extends Thread {
 					System.out.println("Producer offers " + product);
 					queue.offer(product);
 					queue.notifyAll();
+					// adsa
 				}
 				TimeUnit.SECONDS.sleep(rand.nextInt() % 3 + 1);
 			}
