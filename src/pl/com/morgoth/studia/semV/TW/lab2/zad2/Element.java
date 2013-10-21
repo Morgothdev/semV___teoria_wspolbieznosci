@@ -12,4 +12,8 @@ public class Element {
 		return value;
 	}
 
+	public void setValue(int newValue) {
+		value = newValue;
+	}
+
 }
