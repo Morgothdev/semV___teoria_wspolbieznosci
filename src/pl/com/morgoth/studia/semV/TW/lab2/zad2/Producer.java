@@ -29,7 +29,7 @@ public class Producer extends Thread {
 					buffer[index].notifyAll();
 					index = (++index) % buffer.length;
 				}
-				TimeUnit.SECONDS.sleep(rand.nextInt() % 3 + 1);
+				TimeUnit.SECONDS.sleep(rand.nextInt() % 3 + 3);
 			}
 		} catch (InterruptedException e) {
 		}
