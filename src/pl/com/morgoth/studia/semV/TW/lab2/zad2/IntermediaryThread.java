@@ -18,18 +18,20 @@ public class IntermediaryThread extends Thread {
 	public void run() {
 		try {
 			while (!interrupted()) {
-                                synchronized(buffer[index]){
-                                    while(buffer[index].getValue()<valueToChanging){
-                                        buffer[index].wait();
-                                    }
-                                    if(buffer[index].getValue()>valueToChanging){
-                                        System.out.println("WTF");
-                                    }
-                                    buffer[index].inc();
-                                    buffer[index].notifyAll();
-                                    System.out.println("zmiana na "+Integer.toString(valueToChanging+1) + " na pozycji "+Integer.toString(index));
-                                    index = (++index) % buffer.length;
-                                }
+				synchronized (buffer[index]) {
+					while (buffer[index].getValue() < valueToChanging) {
+						buffer[index].wait();
+					}
+					if (buffer[index].getValue() > valueToChanging) {
+						System.out.println("WTF");
+					}
+					buffer[index].inc();
+					buffer[index].notifyAll();
+					System.out.println("zmiana na "
+							+ Integer.toString(valueToChanging + 1)
+							+ " na pozycji " + Integer.toString(index));
+					index = (++index) % buffer.length;
+				}
 				TimeUnit.SECONDS.sleep(rand.nextInt() % 5 + 5);
 			}
 		} catch (InterruptedException e) {
