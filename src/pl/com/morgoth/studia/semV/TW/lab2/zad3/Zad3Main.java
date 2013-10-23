@@ -9,14 +9,14 @@ public class Zad3Main {
 
 	public static void main(String[] args) {
 		Queue<Integer> queue = new LinkedList<Integer>();
-		Producent[] producents = { new Producent(M / 2, queue),
-				new Producent(M - 1, queue), new Producent(M % 8 + 2, queue),
-				new Producent(M - 4, queue), new Producent(M - 5, queue) };
+		Producent[] producents = { new Producent(M, queue),
+				new Producent(M, queue), new Producent(M, queue),
+				new Producent(M, queue), new Producent(M, queue) };
 
-		Consumer[] consumers = { new Consumer(M / 2, queue),
-				new Consumer(M - 1, queue), new Consumer(M % 8 + 2, queue),
-				new Consumer(M - 4, queue), new Consumer(M - 5, queue),
-				new Consumer(M - 3, queue) };
+		Consumer[] consumers = { new Consumer(M, queue),
+				new Consumer(M, queue), new Consumer(M, queue),
+				new Consumer(M, queue), new Consumer(M, queue),
+				new Consumer(M, queue) };
 
 		for (Producent p : producents) {
 			p.start();
