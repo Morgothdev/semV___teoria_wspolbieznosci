@@ -30,7 +30,6 @@ public class Zad3Main {
 		try {
 			TimeUnit.MINUTES.sleep(5);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
