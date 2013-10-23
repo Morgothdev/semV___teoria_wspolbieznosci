@@ -23,7 +23,7 @@ public class Producent extends User {
 			System.out.println("producent włożył do kolejki "
 					+ amountOfNewProducts);
 			queue.notifyAll();
-			TimeUnit.SECONDS.sleep(rand.nextInt(5) + 2);
+			TimeUnit.SECONDS.sleep(rand.nextInt(2));
 		}
 	}
 

@@ -23,7 +23,7 @@ public class Consumer extends User {
 			System.out.println("konsument zdjął z kolejki "
 					+ amountOfProductsToGet);
 			queue.notifyAll();
-			TimeUnit.SECONDS.sleep(rand.nextInt(5) + 2);
+			TimeUnit.SECONDS.sleep(rand.nextInt(2));
 		}
 	}
 }
