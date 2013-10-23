@@ -13,12 +13,15 @@ public class Consumer extends User {
 	public void doInRun() throws InterruptedException {
 		synchronized (queue) {
 			int amountOfProductsToGet = rand.nextInt(count) + 1;
+			System.out.println("Konsument chce " + amountOfProductsToGet);
 			while (queue.size() < amountOfProductsToGet) {
 				queue.wait();
 			}
 			for (int i = 0; i < amountOfProductsToGet; ++i) {
 				queue.poll();
 			}
+			System.out.println("konsument zdjął z kolejki "
+					+ amountOfProductsToGet);
 			queue.notifyAll();
 			TimeUnit.SECONDS.sleep(rand.nextInt(5) + 2);
 		}
