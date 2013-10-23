@@ -2,17 +2,51 @@ package pl.com.morgoth.studia.semV.TW.lab3;
 
 public class List {
 
-	private Node head;
+	private final Node head = new Node(null, null);
 
 	public boolean add(Object newObject) {
-		return false;
+		Node next = head;
+		Node prev = next;
+		prev.lock.lock();
+		while (next != null) {
+			next.lock.lock();
+			prev.lock.unlock();
+			prev = next;
+		}
+		prev.next = new Node(newObject, null);
+		prev.lock.unlock();
+		return true;
 	}
 
 	public boolean remove(Object objectToRemove) {
-		return false;
+		Node next = head;
+		Node prev = next;
+		prev.lock.lock();
+		while (next != null && !next.value.equals(objectToRemove)) {
+			next.lock.lock();
+			prev.lock.unlock();
+			prev = next;
+		}
+		boolean wereThisObjectInList = false;
+		if (next != null) {
+			prev.next = next.next;
+			wereThisObjectInList = true;
+		}
+		prev.lock.unlock();
+		return wereThisObjectInList;
 	}
 
 	public boolean contains(Object object) {
-		return false;
+		Node next = head;
+		Node prev = next;
+		prev.lock.lock();
+		while (next != null && !next.value.equals(object)) {
+			next.lock.lock();
+			prev.lock.unlock();
+			prev = next;
+		}
+		boolean isObjectInList = (next != null && next.value.equals(object));
+		prev.lock.unlock();
+		return isObjectInList;
 	}
 }
