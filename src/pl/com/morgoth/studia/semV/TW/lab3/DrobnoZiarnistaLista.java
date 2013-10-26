@@ -12,8 +12,7 @@ public class DrobnoZiarnistaLista implements List {
 		Node prev = next;
 		prev.lock.lock();
 		while (next != null) {
-			TimeUnit.MILLISECONDS
-					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
+			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			next.lock.lock();
 			prev.lock.unlock();
 
@@ -30,8 +29,7 @@ public class DrobnoZiarnistaLista implements List {
 		Node prev = next;
 		prev.lock.lock();
 		while (next != null && !next.value.equals(objectToRemove)) {
-			TimeUnit.MILLISECONDS
-					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
+			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			next.lock.lock();
 			prev.lock.unlock();
 			prev = next;
@@ -51,8 +49,7 @@ public class DrobnoZiarnistaLista implements List {
 		Node prev = next;
 		prev.lock.lock();
 		while (next != null && !next.value.equals(object)) {
-			TimeUnit.MILLISECONDS
-					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
+			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			next.lock.lock();
 			prev.lock.unlock();
 			prev = next;

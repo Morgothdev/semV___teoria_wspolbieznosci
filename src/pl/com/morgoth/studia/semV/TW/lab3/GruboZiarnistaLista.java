@@ -15,8 +15,7 @@ public class GruboZiarnistaLista implements List {
 		Node next = head;
 		Node prev = next;
 		while (next != null) {
-			TimeUnit.MILLISECONDS
-					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
+			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			prev = next;
 		}
 		prev.next = new Node(newObject, null);
@@ -30,8 +29,7 @@ public class GruboZiarnistaLista implements List {
 		Node next = head;
 		Node prev = next;
 		while (next != null && !next.value.equals(objectToRemove)) {
-			TimeUnit.MILLISECONDS
-					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
+			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			prev = next;
 		}
 		boolean wereThisObjectInList = false;
@@ -48,8 +46,7 @@ public class GruboZiarnistaLista implements List {
 		lock.lock();
 		Node actual = head;
 		while (actual != null && !actual.value.equals(object)) {
-			TimeUnit.MILLISECONDS
-					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
+			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			actual = actual.next;
 		}
 		boolean isObjectInList = (actual != null && actual.value.equals(object));
