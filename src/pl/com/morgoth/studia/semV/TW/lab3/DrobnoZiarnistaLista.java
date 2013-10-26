@@ -1,17 +1,22 @@
 package pl.com.morgoth.studia.semV.TW.lab3;
 
+import java.util.concurrent.TimeUnit;
+
 public class DrobnoZiarnistaLista implements List {
 
 	private final Node head = new Node(null, null);
 
 	@Override
-	public boolean add(Object newObject) {
+	public boolean add(Object newObject) throws InterruptedException {
 		Node next = head;
 		Node prev = next;
 		prev.lock.lock();
 		while (next != null) {
+			TimeUnit.MILLISECONDS
+					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
 			next.lock.lock();
 			prev.lock.unlock();
+
 			prev = next;
 		}
 		prev.next = new Node(newObject, null);
@@ -20,11 +25,13 @@ public class DrobnoZiarnistaLista implements List {
 	}
 
 	@Override
-	public boolean remove(Object objectToRemove) {
+	public boolean remove(Object objectToRemove) throws InterruptedException {
 		Node next = head;
 		Node prev = next;
 		prev.lock.lock();
 		while (next != null && !next.value.equals(objectToRemove)) {
+			TimeUnit.MILLISECONDS
+					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
 			next.lock.lock();
 			prev.lock.unlock();
 			prev = next;
@@ -39,11 +46,13 @@ public class DrobnoZiarnistaLista implements List {
 	}
 
 	@Override
-	public boolean contains(Object object) {
+	public boolean contains(Object object) throws InterruptedException {
 		Node next = head;
 		Node prev = next;
 		prev.lock.lock();
 		while (next != null && !next.value.equals(object)) {
+			TimeUnit.MILLISECONDS
+					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
 			next.lock.lock();
 			prev.lock.unlock();
 			prev = next;

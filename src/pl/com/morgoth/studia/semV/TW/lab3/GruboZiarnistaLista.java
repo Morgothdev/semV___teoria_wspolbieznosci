@@ -1,5 +1,6 @@
 package pl.com.morgoth.studia.semV.TW.lab3;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -9,11 +10,13 @@ public class GruboZiarnistaLista implements List {
 	private final Lock lock = new ReentrantLock();
 
 	@Override
-	public boolean add(Object newObject) {
+	public boolean add(Object newObject) throws InterruptedException {
 		lock.lock();
 		Node next = head;
 		Node prev = next;
 		while (next != null) {
+			TimeUnit.MILLISECONDS
+					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
 			prev = next;
 		}
 		prev.next = new Node(newObject, null);
@@ -22,11 +25,13 @@ public class GruboZiarnistaLista implements List {
 	}
 
 	@Override
-	public boolean remove(Object objectToRemove) {
+	public boolean remove(Object objectToRemove) throws InterruptedException {
 		lock.lock();
 		Node next = head;
 		Node prev = next;
 		while (next != null && !next.value.equals(objectToRemove)) {
+			TimeUnit.MILLISECONDS
+					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
 			prev = next;
 		}
 		boolean wereThisObjectInList = false;
@@ -39,10 +44,12 @@ public class GruboZiarnistaLista implements List {
 	}
 
 	@Override
-	public boolean contains(Object object) {
+	public boolean contains(Object object) throws InterruptedException {
 		lock.lock();
 		Node actual = head;
 		while (actual != null && !actual.value.equals(object)) {
+			TimeUnit.MILLISECONDS
+					.sleep(Main.OBCIAZENIE_POROWNANIA_W_MILISEKUNDACH);
 			actual = actual.next;
 		}
 		boolean isObjectInList = (actual != null && actual.value.equals(object));
