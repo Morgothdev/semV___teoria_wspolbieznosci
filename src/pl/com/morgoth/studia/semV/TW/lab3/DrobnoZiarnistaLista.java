@@ -10,13 +10,14 @@ public class DrobnoZiarnistaLista implements List {
 	public boolean add(Object newObject) throws InterruptedException {
 		Node next = head;
 		Node prev = next;
+		next = prev.next;
 		prev.lock.lock();
 		while (next != null) {
 			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			next.lock.lock();
 			prev.lock.unlock();
-
 			prev = next;
+			next = next.next;
 		}
 		prev.next = new Node(newObject, null);
 		prev.lock.unlock();
@@ -27,12 +28,14 @@ public class DrobnoZiarnistaLista implements List {
 	public boolean remove(Object objectToRemove) throws InterruptedException {
 		Node next = head;
 		Node prev = next;
+		next = prev.next;
 		prev.lock.lock();
 		while (next != null && !next.value.equals(objectToRemove)) {
 			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			next.lock.lock();
 			prev.lock.unlock();
 			prev = next;
+			next = next.next;
 		}
 		boolean wereThisObjectInList = false;
 		if (next != null) {
@@ -47,12 +50,14 @@ public class DrobnoZiarnistaLista implements List {
 	public boolean contains(Object object) throws InterruptedException {
 		Node next = head;
 		Node prev = next;
+		next = prev.next;
 		prev.lock.lock();
 		while (next != null && !next.value.equals(object)) {
 			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			next.lock.lock();
 			prev.lock.unlock();
 			prev = next;
+			next = next.next;
 		}
 		boolean isObjectInList = (next != null && next.value.equals(object));
 		prev.lock.unlock();

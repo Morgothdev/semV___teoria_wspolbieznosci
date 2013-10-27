@@ -14,9 +14,11 @@ public class GruboZiarnistaLista implements List {
 		lock.lock();
 		Node next = head;
 		Node prev = next;
+		next = prev.next;
 		while (next != null) {
 			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			prev = next;
+			next = next.next;
 		}
 		prev.next = new Node(newObject, null);
 		lock.unlock();
@@ -28,9 +30,11 @@ public class GruboZiarnistaLista implements List {
 		lock.lock();
 		Node next = head;
 		Node prev = next;
+		next = prev.next;
 		while (next != null && !next.value.equals(objectToRemove)) {
 			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			prev = next;
+			next = next.next;
 		}
 		boolean wereThisObjectInList = false;
 		if (next != null) {
@@ -44,7 +48,7 @@ public class GruboZiarnistaLista implements List {
 	@Override
 	public boolean contains(Object object) throws InterruptedException {
 		lock.lock();
-		Node actual = head;
+		Node actual = head.next;
 		while (actual != null && !actual.value.equals(object)) {
 			TimeUnit.MILLISECONDS.sleep(Main.dajOpoznieniePorownania());
 			actual = actual.next;

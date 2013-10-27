@@ -15,26 +15,22 @@ public class WatekTestujacy extends Thread {
 	public void run() {
 		try {
 			for (int i = 0; i < 10; ++i) {
-				lista.add(new Integer(rand.nextInt(20)));
-			}
-			for (int i = 0; i < 8; ++i) {
-				lista.contains(new Integer(rand.nextInt(20)));
-			}
-			for (int i = 0; i < 20; ++i) {
-				lista.remove(new Integer(rand.nextInt(20)));
+				Integer number = new Integer(rand.nextInt(20));
+				// System.out.println("probuje wstawic liczbe " + number);
+				lista.add(number);
 			}
 			for (int i = 0; i < 10; ++i) {
-				lista.add(new Integer(rand.nextInt(20)));
+				Integer number = new Integer(rand.nextInt(20));
+				// System.out.println("szukam liczby " + number);
+				lista.contains(number);
 			}
-			for (int i = 0; i < 20; ++i) {
-				lista.remove(new Integer(rand.nextInt(20)));
-			}
-			for (int i = 0; i < 8; ++i) {
-				lista.contains(new Integer(rand.nextInt(20)));
+			for (int i = 0; i < 10; ++i) {
+				Integer number = new Integer(rand.nextInt(20));
+				// System.out.println("usuwam liczbe " + number);
+				lista.remove(number);
 			}
 		} catch (InterruptedException e) {
 
 		}
 	}
-
 }

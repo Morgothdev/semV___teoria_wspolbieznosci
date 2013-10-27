@@ -1,15 +1,19 @@
 package pl.com.morgoth.studia.semV.TW.lab3;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.LinkedList;
+
+import org.apache.logging.log4j.LogManager;
 
 public class Main {
 
-	public static final int[] ILOSC_WATKOW = { 10, 30, 50 };
+	public static final int[] ILOSC_WATKOW = { 20, 50, 100 };
 
-	private static final long[] obciazeniePorownania = { 100, 300, 600 };
+	private static final long[] obciazeniePorownania = { 10, 50, 100 };
 	private static final long aktualneObciazenie = obciazeniePorownania[0];
 
 	public static void main(String[] args) {
+		LogManager.getRootLogger().warn("DUPA");
 		uruchomTestZDrobnoziarnistaLista();
 		uruchomTestZGruboziarnistaLista();
 	}
@@ -30,14 +34,21 @@ public class Main {
 		}
 	}
 
-	private static void uruchomTest(List lista, Integer iloscWatkow,
-			Long czasOpoznienia) {
+	private static void uruchomTest(List lista, Integer iloscWatkow, Long czasOpoznienia) {
 		LinkedList<Thread> testujace = new LinkedList<Thread>();
 		for (int i = 0; i < iloscWatkow; ++i) {
 			testujace.add(new WatekTestujacy(lista));
 		}
 		long startTime = System.currentTimeMillis();
 		for (Thread thread : testujace) {
+			thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+
+				@Override
+				public void uncaughtException(Thread arg0, Throwable arg1) {
+					System.out.println(arg0.toString());
+
+				}
+			});
 			thread.start();
 		}
 		for (Thread thread : testujace) {
@@ -48,10 +59,8 @@ public class Main {
 			}
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println("czas działania dla "
-				+ lista.getClass().getSimpleName() + " ilosci watkow "
-				+ iloscWatkow + " i czasu opoznieni " + czasOpoznienia
-				+ "ms wyniósł: " + (endTime - startTime));
+		System.out.println(lista.getClass().getSimpleName() + ", " + iloscWatkow + ", " + czasOpoznienia + ", "
+				+ (endTime - startTime));
 
 	}
 
