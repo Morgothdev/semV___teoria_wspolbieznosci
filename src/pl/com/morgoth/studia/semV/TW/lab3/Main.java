@@ -7,9 +7,9 @@ import org.apache.logging.log4j.LogManager;
 
 public class Main {
 
-	public static final int[] ILOSC_WATKOW = { 20, 50, 100 };
+	public static final int[] ILOSC_WATKOW = { 10, 30, 50 };
 
-	private static final long[] obciazeniePorownania = { 10, 50, 100 };
+	private static final long[] obciazeniePorownania = { 10, 30, 50 };
 	private static final long aktualneObciazenie = obciazeniePorownania[0];
 
 	public static void main(String[] args) {
