@@ -7,13 +7,12 @@ import org.apache.logging.log4j.LogManager;
 
 public class Main {
 
-	public static final int[] ILOSC_WATKOW = { 10, 30, 50 };
+	public static final int[] ILOSC_WATKOW = { 5, 10, 30 };
 
-	private static final long[] obciazeniePorownania = { 10, 30, 50 };
+	private static final long[] obciazeniePorownania = { 10, 20, 40 };
 	private static final long aktualneObciazenie = obciazeniePorownania[0];
 
 	public static void main(String[] args) {
-		LogManager.getRootLogger().warn("DUPA");
 		uruchomTestZDrobnoziarnistaLista();
 		uruchomTestZGruboziarnistaLista();
 	}
@@ -45,8 +44,7 @@ public class Main {
 
 				@Override
 				public void uncaughtException(Thread arg0, Throwable arg1) {
-					System.out.println(arg0.toString());
-
+					LogManager.getLogger(Main.class).error("uncaught exception", arg1);
 				}
 			});
 			thread.start();
@@ -59,8 +57,9 @@ public class Main {
 			}
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println(lista.getClass().getSimpleName() + ", " + iloscWatkow + ", " + czasOpoznienia + ", "
-				+ (endTime - startTime));
+		LogManager.getLogger(Main.class).info(
+				lista.getClass().getSimpleName() + ", " + iloscWatkow + ", " + czasOpoznienia + ", "
+						+ (endTime - startTime));
 
 	}
 
