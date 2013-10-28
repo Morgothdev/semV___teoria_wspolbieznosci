@@ -13,7 +13,7 @@ public class Producent extends User {
 	public void doInRun() throws InterruptedException {
 		synchronized (queue) {
 			int amountOfNewProducts = rand.nextInt(count) + 1;
-			System.out.println("Producent chce " + amountOfNewProducts);
+			System.out.println("Producent chce włożyć" + amountOfNewProducts);
 			while ((2 * count - queue.size()) < amountOfNewProducts) {
 				queue.wait();
 			}
