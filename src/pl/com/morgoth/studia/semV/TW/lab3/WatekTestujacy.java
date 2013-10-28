@@ -14,17 +14,17 @@ public class WatekTestujacy extends Thread {
 	@Override
 	public void run() {
 		try {
-			for (int i = 0; i < 10; ++i) {
+			for (int i = 0; i < 1; ++i) {
 				Integer number = new Integer(rand.nextInt(20));
 				// System.out.println("probuje wstawic liczbe " + number);
 				lista.add(number);
 			}
-			for (int i = 0; i < 10; ++i) {
+			for (int i = 0; i < 1; ++i) {
 				Integer number = new Integer(rand.nextInt(20));
 				// System.out.println("szukam liczby " + number);
 				lista.contains(number);
 			}
-			for (int i = 0; i < 10; ++i) {
+			for (int i = 0; i <1; ++i) {
 				Integer number = new Integer(rand.nextInt(20));
 				// System.out.println("usuwam liczbe " + number);
 				lista.remove(number);

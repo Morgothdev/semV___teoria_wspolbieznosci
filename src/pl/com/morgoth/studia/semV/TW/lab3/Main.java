@@ -3,14 +3,14 @@ package pl.com.morgoth.studia.semV.TW.lab3;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.LinkedList;
 
-import org.apache.logging.log4j.LogManager;
+
 
 public class Main {
 
-	public static final int[] ILOSC_WATKOW = { 5, 10, 30 };
+	public static final int[] ILOSC_WATKOW = { 5, 10};
 
-	private static final long[] obciazeniePorownania = { 10, 20, 40 };
-	private static final long aktualneObciazenie = obciazeniePorownania[0];
+	private static final long[] obciazeniePorownania = {0, 5, 10 };
+	private static long aktualneObciazenie = obciazeniePorownania[0];
 
 	public static void main(String[] args) {
 		uruchomTestZDrobnoziarnistaLista();
@@ -28,7 +28,10 @@ public class Main {
 	private static void uruchomTestZLista(List listaDoTestowania) {
 		for (Integer iloscWatkow : ILOSC_WATKOW) {
 			for (Long czasOpoznienia : obciazeniePorownania) {
-				uruchomTest(listaDoTestowania, iloscWatkow, czasOpoznienia);
+                            aktualneObciazenie=czasOpoznienia;
+                            for(int i =0;i<3;++i){
+                                uruchomTest(listaDoTestowania, iloscWatkow, czasOpoznienia);
+                            }
 			}
 		}
 	}
@@ -44,7 +47,8 @@ public class Main {
 
 				@Override
 				public void uncaughtException(Thread arg0, Throwable arg1) {
-					LogManager.getLogger(Main.class).error("uncaught exception", arg1);
+					//LogManager.getLogger(Main.class).error("uncaught exception", arg1);
+                                        System.out.println("uncaught exception "+arg1.getLocalizedMessage());
 				}
 			});
 			thread.start();
@@ -57,8 +61,9 @@ public class Main {
 			}
 		}
 		long endTime = System.currentTimeMillis();
-		LogManager.getLogger(Main.class).info(
-				lista.getClass().getSimpleName() + ", " + iloscWatkow + ", " + czasOpoznienia + ", "
+		//LogManager.getLogger(Main.class).info(
+		System.out.println(
+                        lista.getClass().getSimpleName() + ", " + iloscWatkow + ", " + czasOpoznienia + ", "
 						+ (endTime - startTime));
 
 	}
