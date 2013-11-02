@@ -11,10 +11,10 @@ public class Kelner {
 	private final ZamowienieNaStolik[] pary;
 	private Stolik stolik;
 
-	Lock lock = new ReentrantLock();
-	Condition monitorStolika = lock.newCondition();
-	int iloscSiedzacychPrzyStoliku = 0;
-	int numerSiedzacychPrzyStoiku = -1;
+	private Lock lock = new ReentrantLock();
+	private Condition monitorStolika = lock.newCondition();
+	private int iloscSiedzacychPrzyStoliku = 0;
+	private int numerSiedzacychPrzyStoiku = -1;
 
 	public Kelner(int iloscPar) {
 		pary = new ZamowienieNaStolik[iloscPar];
