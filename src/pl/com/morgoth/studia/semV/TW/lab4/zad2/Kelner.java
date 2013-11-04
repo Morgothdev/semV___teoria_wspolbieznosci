@@ -32,14 +32,17 @@ public class Kelner {
 	public Stolik chceStolik(Osoba osobaChcacaStolik) throws InterruptedException {
 		lock.lock();
 		try {
-			log.info("osoba z pary {} wchodzi", osobaChcacaStolik.podajNumer());
+			log.info("osoba numer {} z pary {} wchodzi", osobaChcacaStolik.podajNumerOsoby(),
+					osobaChcacaStolik.podajNumer());
 			++pary[osobaChcacaStolik.podajNumer()];
 			int iloscCzekajacychZDanejPary = pary[osobaChcacaStolik.podajNumer()];
 
-			while (iloscCzekajacychZDanejPary < 2) {
+			while (pary[osobaChcacaStolik.podajNumer()] < 2) {
 				log.info("osoba numer {} z pary {} zasypia czekając na komplet", osobaChcacaStolik.podajNumerOsoby(),
 						osobaChcacaStolik.podajNumer());
 				monitorPar[osobaChcacaStolik.podajNumer()].await();
+				log.info("osoba numer {} z pary {} budzi się czekając na komplet", osobaChcacaStolik.podajNumerOsoby(),
+						osobaChcacaStolik.podajNumer());
 			}
 
 			monitorPar[osobaChcacaStolik.podajNumer()].signalAll();
@@ -60,7 +63,7 @@ public class Kelner {
 						osobaChcacaStolik.podajNumer());
 			}
 			if (numerSiedzacychPrzyStoiku < 0) {
-				log.info("osoba numerr {} z pary {} zajęła stolik", osobaChcacaStolik.podajNumerOsoby(),
+				log.info("osoba numer {} z pary {} zajęła stolik", osobaChcacaStolik.podajNumerOsoby(),
 						osobaChcacaStolik.podajNumer());
 				numerSiedzacychPrzyStoiku = osobaChcacaStolik.podajNumer();
 			}

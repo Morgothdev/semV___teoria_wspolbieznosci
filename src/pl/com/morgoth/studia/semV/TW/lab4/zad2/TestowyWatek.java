@@ -34,7 +34,7 @@ class TestowyWatek extends Thread {
 			while (!interrupted()) {
 				Stolik stolik = kelner.chceStolik(osoba);
 				System.out.println("jeden z pary" + numer + " orzymał stolik");
-				TimeUnit.SECONDS.sleep(new Random(54).nextInt(5) + 15);
+				TimeUnit.SECONDS.sleep(new Random(54).nextInt(5) + 20);
 				System.out.println("osoba z pary" + numer + " skonczyla przy stoliku");
 				kelner.zwalniamStolik(osoba);
 				TimeUnit.SECONDS.sleep(4);
