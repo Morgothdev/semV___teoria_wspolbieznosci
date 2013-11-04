@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-
-
 public class MonitorDrukarek {
 
 	private final Stack<Drukarka> dostepneDrukarki = new Stack<Drukarka>();
@@ -22,12 +20,13 @@ public class MonitorDrukarek {
 			while (dostepneDrukarki.isEmpty()) {
 				wait();
 			}
-                        Drukarka przydzielonaDrukarka = dostepneDrukarki.pop();
-                        zajeteDrukarki.add(przydzielonaDrukarka);
+			Drukarka przydzielonaDrukarka = dostepneDrukarki.pop();
+			zajeteDrukarki.add(przydzielonaDrukarka);
 			return przydzielonaDrukarka;
 
 		} catch (InterruptedException e) {
-			//LogManager.getLogger(getClass()).warn("podczas przydzielania drukarki", e);
+			// LogManager.getLogger(getClass()).warn("podczas przydzielania drukarki",
+			// e);
 			return null;
 		}
 
@@ -39,6 +38,6 @@ public class MonitorDrukarek {
 		}
 		zajeteDrukarki.remove(zwalnianaDrukarka);
 		dostepneDrukarki.push(zwalnianaDrukarka);
-                notifyAll();
+		notifyAll();
 	}
 }
