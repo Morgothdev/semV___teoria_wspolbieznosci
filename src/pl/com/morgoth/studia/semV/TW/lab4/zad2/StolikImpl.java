@@ -5,12 +5,12 @@
 package pl.com.morgoth.studia.semV.TW.lab4.zad2;
 
 /**
- *
+ * 
  * @author Student17
  */
 class StolikImpl implements Stolik {
 
-    public StolikImpl() {
-    }
-    
+	public StolikImpl() {
+	}
+
 }

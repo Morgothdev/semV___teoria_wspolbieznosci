@@ -5,10 +5,6 @@ public class Osoba {
 	private final int numer;
 	private final int numerOsoby;
 
-	public int podajNumerOsoby() {
-		return numerOsoby;
-	}
-
 	public Osoba(int numerPary, int numerOsoby) {
 		this.numer = numerPary;
 		this.numerOsoby = numerOsoby;
@@ -17,6 +13,10 @@ public class Osoba {
 
 	public int podajNumer() {
 		return numer;
+	}
+
+	public int podajNumerOsoby() {
+		return numerOsoby;
 	}
 
 }

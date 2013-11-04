@@ -35,7 +35,6 @@ public class Kelner {
 			log.info("osoba numer {} z pary {} wchodzi", osobaChcacaStolik.podajNumerOsoby(),
 					osobaChcacaStolik.podajNumer());
 			++pary[osobaChcacaStolik.podajNumer()];
-			int iloscCzekajacychZDanejPary = pary[osobaChcacaStolik.podajNumer()];
 
 			while (pary[osobaChcacaStolik.podajNumer()] < 2) {
 				log.info("osoba numer {} z pary {} zasypia czekając na komplet", osobaChcacaStolik.podajNumerOsoby(),

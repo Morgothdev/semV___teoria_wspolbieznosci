@@ -5,6 +5,7 @@ public class Zad2Main {
 	public static void main(String[] args) {
 
 		Kelner kelner = new Kelner(3);
+		@SuppressWarnings("unused")
 		TestowaPara[] testowePary = { new TestowaPara(0, kelner), new TestowaPara(1, kelner),
 				new TestowaPara(2, kelner) };
 
