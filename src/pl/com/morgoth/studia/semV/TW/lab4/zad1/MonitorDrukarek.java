@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-import org.apache.logging.log4j.LogManager;
+
 
 public class MonitorDrukarek {
 
@@ -19,14 +19,15 @@ public class MonitorDrukarek {
 
 	public synchronized Drukarka przydzielMiDrukarke() {
 		try {
-
 			while (dostepneDrukarki.isEmpty()) {
-				dostepneDrukarki.wait();
+				wait();
 			}
-			return dostepneDrukarki.pop();
+                        Drukarka przydzielonaDrukarka = dostepneDrukarki.pop();
+                        zajeteDrukarki.add(przydzielonaDrukarka);
+			return przydzielonaDrukarka;
 
 		} catch (InterruptedException e) {
-			LogManager.getLogger(getClass()).warn("podczas przydzielania drukarki", e);
+			//LogManager.getLogger(getClass()).warn("podczas przydzielania drukarki", e);
 			return null;
 		}
 
@@ -38,5 +39,6 @@ public class MonitorDrukarek {
 		}
 		zajeteDrukarki.remove(zwalnianaDrukarka);
 		dostepneDrukarki.push(zwalnianaDrukarka);
+                notifyAll();
 	}
 }
