@@ -10,6 +10,9 @@ public class DrobnoZiarnistaLista implements List {
 
 	@Override
 	public boolean add(Object newObject) throws InterruptedException {
+		if (newObject == null) {
+			throw new IllegalArgumentException(new NullPointerException());
+		}
 		Node next = head;
 		Node prev = next;
 		next = prev.next;

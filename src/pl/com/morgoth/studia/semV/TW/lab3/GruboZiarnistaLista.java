@@ -13,6 +13,9 @@ public class GruboZiarnistaLista implements List {
 
 	@Override
 	public boolean add(Object newObject) throws InterruptedException {
+		if (newObject == null) {
+			throw new IllegalArgumentException(new NullPointerException());
+		}
 		lock.lock();
 		Node next = head;
 		Node prev = next;
