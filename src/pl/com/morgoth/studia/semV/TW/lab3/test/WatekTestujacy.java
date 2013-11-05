@@ -1,6 +1,8 @@
-package pl.com.morgoth.studia.semV.TW.lab3;
+package pl.com.morgoth.studia.semV.TW.lab3.test;
 
 import java.util.Random;
+
+import pl.com.morgoth.studia.semV.TW.lab3.List;
 
 public class WatekTestujacy extends Thread {
 

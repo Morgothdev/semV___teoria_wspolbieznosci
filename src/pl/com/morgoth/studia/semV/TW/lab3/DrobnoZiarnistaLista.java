@@ -2,6 +2,8 @@ package pl.com.morgoth.studia.semV.TW.lab3;
 
 import java.util.concurrent.TimeUnit;
 
+import pl.com.morgoth.studia.semV.TW.lab3.test.Main;
+
 public class DrobnoZiarnistaLista implements List {
 
 	private final Node head = new Node(null, null);

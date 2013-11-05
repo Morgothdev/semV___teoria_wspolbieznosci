@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import pl.com.morgoth.studia.semV.TW.lab3.test.Main;
+
 public class GruboZiarnistaLista implements List {
 
 	private final Node head = new Node(null, null);

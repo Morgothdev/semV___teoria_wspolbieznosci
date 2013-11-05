@@ -1,7 +1,11 @@
-package pl.com.morgoth.studia.semV.TW.lab3;
+package pl.com.morgoth.studia.semV.TW.lab3.test;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.LinkedList;
+
+import pl.com.morgoth.studia.semV.TW.lab3.DrobnoZiarnistaLista;
+import pl.com.morgoth.studia.semV.TW.lab3.GruboZiarnistaLista;
+import pl.com.morgoth.studia.semV.TW.lab3.List;
 
 
 
