@@ -1,7 +1,5 @@
-package pl.com.morgoth.studia.semV.TW.lab5.implementations;
+package pl.com.morgoth.studia.semV.TW.lab5;
 
-import pl.com.morgoth.studia.semV.TW.lab5.MethodRequest;
-import pl.com.morgoth.studia.semV.TW.lab5.RequestBuffer;
 
 public class Executor extends Thread {
 

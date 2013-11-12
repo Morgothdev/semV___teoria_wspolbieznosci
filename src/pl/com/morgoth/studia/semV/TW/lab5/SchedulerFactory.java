@@ -1,6 +1,5 @@
-package pl.com.morgoth.studia.semV.TW.lab5.implementations;
+package pl.com.morgoth.studia.semV.TW.lab5;
 
-import pl.com.morgoth.studia.semV.TW.lab5.Scheduler;
 
 public class SchedulerFactory {
 

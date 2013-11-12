@@ -1,9 +1,7 @@
-package pl.com.morgoth.studia.semV.TW.lab5.implementations;
+package pl.com.morgoth.studia.semV.TW.lab5;
 
 import java.util.concurrent.LinkedBlockingDeque;
 
-import pl.com.morgoth.studia.semV.TW.lab5.MethodRequest;
-import pl.com.morgoth.studia.semV.TW.lab5.RequestBuffer;
 
 public class RequestBufferImpl implements RequestBuffer {
 

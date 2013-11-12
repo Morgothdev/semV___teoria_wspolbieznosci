@@ -1,10 +1,7 @@
-package pl.com.morgoth.studia.semV.TW.lab5.implementations;
+package pl.com.morgoth.studia.semV.TW.lab5;
 
 import java.util.concurrent.Future;
 
-import pl.com.morgoth.studia.semV.TW.lab5.MethodRequest;
-import pl.com.morgoth.studia.semV.TW.lab5.Scheduler;
-import pl.com.morgoth.studia.semV.TW.lab5.Servant;
 
 public class Proxy {
 
@@ -23,7 +20,7 @@ public class Proxy {
 
 			@Override
 			public void call() {
-				futureResult.done(servant.m1());
+				futureResult.setDone(servant.m1());
 			}
 		});
 		return futureResult;
@@ -41,7 +38,7 @@ public class Proxy {
 
 			@Override
 			public void call() {
-				futureResult.done(servant.m2());
+				futureResult.setDone(servant.m2());
 			}
 		});
 		return futureResult;
@@ -60,6 +57,7 @@ public class Proxy {
 			@Override
 			public void call() {
 				servant.m3();
+				futureResult.setDone(null);
 			}
 		});
 		return futureResult;

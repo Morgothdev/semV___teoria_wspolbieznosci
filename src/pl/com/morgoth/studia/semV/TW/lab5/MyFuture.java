@@ -1,4 +1,4 @@
-package pl.com.morgoth.studia.semV.TW.lab5.implementations;
+package pl.com.morgoth.studia.semV.TW.lab5;
 
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -16,7 +16,7 @@ public class MyFuture<V> implements Future<V> {
 	private State state = State.WAITING;
 	private boolean mayInterruptIfIsComputing;
 
-	public synchronized void done(V result) {
+	public synchronized void setDone(V result) {
 		state = State.DONE;
 		this.result = result;
 		notifyAll();
