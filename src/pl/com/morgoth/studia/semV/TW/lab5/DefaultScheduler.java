@@ -1,6 +1,5 @@
 package pl.com.morgoth.studia.semV.TW.lab5;
 
-
 public class DefaultScheduler implements Scheduler {
 
 	private static final int EXECUTORS_COUNT = 1;
@@ -10,7 +9,7 @@ public class DefaultScheduler implements Scheduler {
 
 	public DefaultScheduler() {
 		for (int i = 0; i < EXECUTORS_COUNT; ++i) {
-			new Executor(requestBuffer, executors, "thread" + i);
+			new Executor(requestBuffer, executors, "thread" + i).start();
 		}
 	}
 

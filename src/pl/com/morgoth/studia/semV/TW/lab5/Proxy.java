@@ -2,11 +2,15 @@ package pl.com.morgoth.studia.semV.TW.lab5;
 
 import java.util.concurrent.Future;
 
-
 public class Proxy {
 
-	Servant servant = new ServantImpl();
-	Scheduler scheduler = SchedulerFactory.getDefaultScheduler();
+	Servant servant;
+	Scheduler scheduler;
+
+	public Proxy(Servant servant, Scheduler scheduler) {
+		this.servant = servant;
+		this.scheduler = scheduler;
+	}
 
 	public Future<Long> m1() {
 		final MyFuture<Long> futureResult = new MyFuture<Long>();

@@ -2,7 +2,6 @@ package pl.com.morgoth.studia.semV.TW.lab5;
 
 import java.util.concurrent.LinkedBlockingDeque;
 
-
 public class RequestBufferImpl implements RequestBuffer {
 
 	private final LinkedBlockingDeque<MethodRequest> buffer = new LinkedBlockingDeque<MethodRequest>();
@@ -14,7 +13,7 @@ public class RequestBufferImpl implements RequestBuffer {
 
 	@Override
 	public MethodRequest get() throws InterruptedException {
-		return buffer.poll();
+		return buffer.take();
 	}
 
 }
