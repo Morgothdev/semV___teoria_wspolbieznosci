@@ -4,67 +4,47 @@ import java.util.concurrent.Future;
 
 public class Proxy {
 
-	Servant servant;
+	ServantEQBuffer servant;
 	Scheduler scheduler;
 
-	public Proxy(Servant servant, Scheduler scheduler) {
+	public Proxy(ServantEQBuffer servant, Scheduler scheduler) {
 		this.servant = servant;
 		this.scheduler = scheduler;
 	}
 
-	public Future<Long> m1() {
-		final MyFuture<Long> futureResult = new MyFuture<Long>();
-
+	public Future<Boolean> put(final Object object) {
+		final MyFuture<Boolean> futureResult = new MyFuture<Boolean>();
 		scheduler.enqueue(new MethodRequest() {
 
 			@Override
 			public boolean guard() {
-				return !futureResult.isCancelled();
+				return (!futureResult.isCancelled() && servant.canPut());
 			}
 
 			@Override
 			public void call() {
-				futureResult.setDone(servant.m1());
+                                servant.put(object);
+				futureResult.setDone(true);
 			}
 		});
 		return futureResult;
 	}
 
-	public Future<Object> m2() {
+	public Future<Object> get() {
 		final MyFuture<Object> futureResult = new MyFuture<Object>();
 
 		scheduler.enqueue(new MethodRequest() {
 
 			@Override
 			public boolean guard() {
-				return !futureResult.isCancelled();
+				return (!futureResult.isCancelled()&&servant.canGet());
 			}
 
 			@Override
 			public void call() {
-				futureResult.setDone(servant.m2());
+				futureResult.setDone(servant.get());
 			}
 		});
 		return futureResult;
 	}
-
-	public Future<Void> m3() {
-		final MyFuture<Void> futureResult = new MyFuture<Void>();
-
-		scheduler.enqueue(new MethodRequest() {
-
-			@Override
-			public boolean guard() {
-				return !futureResult.isCancelled();
-			}
-
-			@Override
-			public void call() {
-				servant.m3();
-				futureResult.setDone(null);
-			}
-		});
-		return futureResult;
-	}
-
 }

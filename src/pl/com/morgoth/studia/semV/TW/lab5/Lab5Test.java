@@ -1,5 +1,6 @@
 package pl.com.morgoth.studia.semV.TW.lab5;
 
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -13,30 +14,26 @@ public class Lab5Test {
 		LogManager.getLogger(Lab5Test.class).log(Level.INFO, "TEST START");
 
 		final Scheduler scheduer = SchedulerFactory.getDefaultScheduler();
-		final Servant servant = new ServantImpl();
+		
 
 		Runnable generatorRunnable = new Runnable() {
 
 			@Override
 			public void run() {
-				Proxy proxy = new Proxy(servant, scheduer);
+				Proxy proxy = scheduer.getProxy();
 				try {
 					while (!Thread.interrupted()) {
 						for (int i = 0; i < 40; ++i) {
-							switch (i % 3) {
+							switch (new Random(43).nextInt(2)) {
 							case 0:
-								Future<Long> resultLong = proxy.m1();
-								LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Returned from m1 {}",
-										resultLong.get());
+								Future<Boolean> tryPut = proxy.put(new Object());
+								LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Returned from put {}",
+										tryPut.get());
 								break;
 							case 1:
-								Future<Object> resultObj = proxy.m2();
-								LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Returned from m2 {}",
+								Future<Object> resultObj = proxy.get();
+								LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Returned from get {}",
 										resultObj.get());
-								break;
-							case 2:
-								Future<Void> resultVoid = proxy.m3();
-								LogManager.getLogger(Lab5Test.class).log(Level.INFO, "m3 executed");
 								break;
 							default:
 								break;
