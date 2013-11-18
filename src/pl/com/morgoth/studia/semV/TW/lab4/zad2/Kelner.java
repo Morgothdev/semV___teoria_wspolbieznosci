@@ -7,7 +7,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-//import org.apache.logging.log4j.LogManager;
 public class Kelner {
 
 	private final int[] pary;
@@ -67,6 +66,7 @@ public class Kelner {
 				numerSiedzacychPrzyStoiku = osobaChcacaStolik.podajNumer();
 			}
 			++iloscSiedzacychPrzyStoliku;
+                        log.info("osoba numer {} z pary {} jest {} przy stoliku",osobaChcacaStolik.podajNumerOsoby(),osobaChcacaStolik.podajNumer(),(iloscSiedzacychPrzyStoliku==1)?"pierwsza":"druga");
 			return stolik;
 
 		} finally {
