@@ -1,5 +1,7 @@
 package pl.com.morgoth.studia.semV.TW.lab5;
 
+import org.apache.logging.log4j.LogManager;
+
 public class ServantEQBuffer {
 
     private final int BUFFER_SIZE = 3;
@@ -15,6 +17,7 @@ public class ServantEQBuffer {
     }
 
     public void put(Object object) {
+        LogManager.getLogger(ServantEQBuffer.class).info("putted {}",object);
         data[count++] = object;
     }
 
