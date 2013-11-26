@@ -13,8 +13,7 @@ public class Lab5Test {
 
 		LogManager.getLogger(Lab5Test.class).log(Level.INFO, "TEST START");
 
-		final Scheduler scheduer = SchedulerFactory.getDefaultScheduler();
-		
+		final Scheduler scheduer = new Scheduler();
 
 		Runnable generatorRunnable = new Runnable() {
 
@@ -23,9 +22,9 @@ public class Lab5Test {
 				Proxy proxy = scheduer.getProxy();
 				try {
 					while (!Thread.interrupted()) {
-                                            Random rand = new Random(45);
+						Random rand = new Random(45);
 						for (int i = 0; i < 40; ++i) {
-							switch (rand.nextInt()%2) {
+							switch (rand.nextInt() % 2) {
 							case 0:
 								Future<Boolean> tryPut = proxy.put(new Object());
 								LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Returned from put {}",
