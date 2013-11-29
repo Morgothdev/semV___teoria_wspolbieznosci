@@ -46,8 +46,8 @@ public class MyFuture<V> implements Future<V> {
 	}
 
 	@Override
-	public synchronized V get(long timeout, TimeUnit timeoutUnit) throws InterruptedException, ExecutionException,
-			TimeoutException {
+	public synchronized V get(long timeout, TimeUnit timeoutUnit)
+			throws InterruptedException, ExecutionException, TimeoutException {
 		throw new UnsupportedOperationException();
 	}
 

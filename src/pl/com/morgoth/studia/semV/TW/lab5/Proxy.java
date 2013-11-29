@@ -18,12 +18,12 @@ public class Proxy {
 
 			@Override
 			public boolean guard() {
-				return (!futureResult.isCancelled() && servant.canPut());
+				return (servant.canPut());
 			}
 
 			@Override
 			public void call() {
-                                servant.put(object);
+				servant.put(object);
 				futureResult.setDone(true);
 			}
 		});
@@ -37,7 +37,7 @@ public class Proxy {
 
 			@Override
 			public boolean guard() {
-				return (!futureResult.isCancelled()&&servant.canGet());
+				return (servant.canGet());
 			}
 
 			@Override
