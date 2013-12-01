@@ -6,11 +6,9 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.logging.log4j.LogManager;
-
 public class Scheduler {
 
-	private final LinkedBlockingDeque<MethodRequest> requestQueue = new LinkedBlockingDeque<MethodRequest>();
+	private final LinkedBlockingDeque<MethodRequest> buffer = new LinkedBlockingDeque<MethodRequest>();
 	private final ServantEQBuffer servant = new ServantEQBuffer();
 	private final Thread executor;
 
@@ -29,7 +27,7 @@ public class Scheduler {
 	}
 
 	public void enqueue(MethodRequest methodRequest) {
-		requestQueue.offer(methodRequest);
+		buffer.addLast(methodRequest);
 	}
 
 	public Proxy getProxy() {
@@ -38,12 +36,11 @@ public class Scheduler {
 
 	public void dispatch() {
 		try {
-			MethodRequest methodToExecute = requestQueue.take();
-			LogManager.getLogger(Scheduler.class).info("method request guard {}", methodToExecute.guard());
+			MethodRequest methodToExecute = buffer.take();
 			if (methodToExecute.guard()) {
 				methodToExecute.call();
 			} else {
-				requestQueue.add(methodToExecute);
+				buffer.addLast(methodToExecute);
 			}
 		} catch (InterruptedException ex) {
 			Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
