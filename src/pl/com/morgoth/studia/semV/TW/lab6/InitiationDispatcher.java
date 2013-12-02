@@ -33,6 +33,7 @@ public class InitiationDispatcher implements Runnable {
 		SelectionKey sk = serverSocket.register(selector, SelectionKey.OP_ACCEPT);
 		sk.attach(new LoggingAcceptor(serverSocket, selector, fileChannel));
 		LogManager.getLogger(InitiationDispatcher.class).log(Level.INFO, "configured");
+
 		new Thread(this).start();
 	}
 
@@ -46,6 +47,7 @@ public class InitiationDispatcher implements Runnable {
 				Iterator<SelectionKey> it = selectedKeys.iterator();
 				while (it.hasNext()) {
 					dispatch(it.next());
+					it.remove();
 				}
 				selectedKeys.clear();
 			}

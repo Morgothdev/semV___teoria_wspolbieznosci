@@ -32,9 +32,13 @@ public class LoggingHandler implements Runnable, EventHandler {
 	@Override
 	public void run() {
 		try {
-			while (socket.read(dst) > 0) {
-				LogManager.getLogger(LoggingHandler.class).log(Level.INFO, "log handler reads {}", dst);
-				fileChannel.write(dst);
+			int readed, wrote;
+			while ((readed = socket.read(dst)) > 0) {
+				dst.compact();
+
+				wrote = fileChannel.write(dst);
+				LogManager.getLogger(LoggingHandler.class).log(Level.INFO, "log handler reads {}, wrote {}", readed,
+						wrote);
 			}
 		} catch (IOException e) {
 			LogManager.getLogger(LoggingHandler.class).error("run", e);
