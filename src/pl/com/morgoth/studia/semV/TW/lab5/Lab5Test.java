@@ -25,12 +25,16 @@ public class Lab5Test {
 				try {
 					for (int i = 0; i < 40; ++i) {
 						int random = Math.abs(rand.nextInt());
-						switch (random % 2) {
+						switch (random % 5) {
 						case 0:
-							Future<Boolean> tryPut = proxy.put(new Object());
+                                                case 1:
+                                                case 2:
+						LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Try put");	
+                                                    Future<Boolean> tryPut = proxy.put(new Object());
 							LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Returned from put {}", tryPut.get());
 							break;
-						case 1:
+						case 3:
+                                                case 4:
 							LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Try get");
 							Future<Object> resultObj = proxy.get();
 							LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Returned from get {}",
@@ -43,6 +47,8 @@ public class Lab5Test {
 							break;
 						}
 					}
+                			LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Thread {} ends his work",Thread.currentThread());
+	                                
 
 				} catch (InterruptedException e) {
 
