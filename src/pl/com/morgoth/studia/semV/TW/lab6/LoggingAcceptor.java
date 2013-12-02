@@ -8,12 +8,13 @@ import java.nio.channels.SocketChannel;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
-class LoggingAcceptor implements Runnable {
+class LoggingAcceptor implements Runnable, EventHandler {
 
 	private final ServerSocketChannel serverSocket;
 	private final Selector selector;
+	private SocketChannel logFileAppender;
 
-	public LoggingAcceptor(ServerSocketChannel serverSocket, Selector selector) {
+	public LoggingAcceptor(ServerSocketChannel serverSocket, Selector selector, SocketChannel logFileAppender) {
 		this.serverSocket = serverSocket;
 		this.selector = selector;
 	}
@@ -21,11 +22,16 @@ class LoggingAcceptor implements Runnable {
 	@Override
 	public void run() {
 		try {
-			SocketChannel c = serverSocket.accept();
-			if (c != null)
-				new LoggingHandler(selector, c);
+			SocketChannel socketChannelForClient = serverSocket.accept();
+			if (socketChannelForClient != null)
+				new LoggingHandler(selector, socketChannelForClient, logFileAppender);
 		} catch (IOException ex) {
 			LogManager.getLogger(LoggingAcceptor.class).log(Level.ERROR, "", ex);
 		}
+	}
+
+	@Override
+	public void handleEvent() {
+		run();
 	}
 }
