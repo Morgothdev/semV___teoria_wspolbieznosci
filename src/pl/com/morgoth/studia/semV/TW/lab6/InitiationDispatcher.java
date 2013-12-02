@@ -2,15 +2,17 @@ package pl.com.morgoth.studia.semV.TW.lab6;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.channels.FileChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
 public class InitiationDispatcher implements Runnable {
@@ -24,10 +26,14 @@ public class InitiationDispatcher implements Runnable {
 		serverSocket.socket().bind(new InetSocketAddress(port));
 		serverSocket.configureBlocking(false);
 		Path logPath = FileSystems.getDefault().getPath("logFromServer.log");
-		SocketChannel fileChannel = SocketChannel.open();
-		FileLogAppender logAppender = new FileLogAppender(selector, logPath, fileChannel);
+
+		FileChannel fileChannel = FileChannel.open(logPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+		LogManager.getLogger(InitiationDispatcher.class).log(Level.ERROR, "filechannel: {}", fileChannel);
+
 		SelectionKey sk = serverSocket.register(selector, SelectionKey.OP_ACCEPT);
 		sk.attach(new LoggingAcceptor(serverSocket, selector, fileChannel));
+		LogManager.getLogger(InitiationDispatcher.class).log(Level.INFO, "configured");
+		new Thread(this).start();
 	}
 
 	@Override
@@ -36,6 +42,7 @@ public class InitiationDispatcher implements Runnable {
 			while (!Thread.interrupted()) {
 				selector.select();
 				Set<SelectionKey> selectedKeys = selector.selectedKeys();
+				LogManager.getLogger(InitiationDispatcher.class).log(Level.DEBUG, "selected keys {}", selectedKeys);
 				Iterator<SelectionKey> it = selectedKeys.iterator();
 				while (it.hasNext()) {
 					dispatch(it.next());
