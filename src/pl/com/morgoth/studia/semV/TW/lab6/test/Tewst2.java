@@ -21,7 +21,7 @@ public class Tewst2 {
                         s2.isConnected(), s2.getLocalAddress(), s2.getRemoteSocketAddress());
         s2.getOutputStream().write("record from socket2 \"kot ma downa\"".getBytes());
         s2.getOutputStream().flush();
-
+        s2.close();
         s2.close();
     }
 }
