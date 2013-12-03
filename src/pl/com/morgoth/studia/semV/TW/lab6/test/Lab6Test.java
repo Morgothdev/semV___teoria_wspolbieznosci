@@ -1,7 +1,6 @@
 package pl.com.morgoth.studia.semV.TW.lab6.test;
 
 import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -23,16 +22,9 @@ public class Lab6Test {
 			s1.getOutputStream().write("record from socket1 \"ala ma kota\"".getBytes());
 			s1.getOutputStream().flush();
 
-			Socket s2 = new Socket("localhost", LOGGING_SERVER_CONNECTION_PORT);
-			s2.getOutputStream().write("record from socket2 \"kot ma downa\"".getBytes());
-			s2.close();
-
-			TimeUnit.SECONDS.sleep(4);
-
 			s1.getOutputStream().write("record from socket1 \"ala ma kota, a kot ma ale\"".getBytes());
 			s1.getOutputStream().flush();
 			s1.close();
-
 		} catch (Exception e) {
 			LogManager.getLogger(Lab6Test.class).log(Level.ERROR, e);
 		}

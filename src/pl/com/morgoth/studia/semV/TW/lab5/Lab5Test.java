@@ -27,10 +27,11 @@ public class Lab5Test {
 						int random = Math.abs(rand.nextInt());
 						switch (random % 2) {
 						case 0:
-							Future<Boolean> tryPut = proxy.put(new Object());
+						LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Try put");	
+                                                    Future<Boolean> tryPut = proxy.put(new Object());
 							LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Returned from put {}", tryPut.get());
 							break;
-						case 1:
+                                                case 1:
 							LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Try get");
 							Future<Object> resultObj = proxy.get();
 							LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Returned from get {}",
@@ -43,6 +44,8 @@ public class Lab5Test {
 							break;
 						}
 					}
+                			LogManager.getLogger(Lab5Test.class).log(Level.INFO, "Thread {} ends his work",Thread.currentThread());
+	                                
 
 				} catch (InterruptedException e) {
 
@@ -54,14 +57,14 @@ public class Lab5Test {
 
 		try {
 			Thread t1 = new Thread(generatorRunnable);
-			TimeUnit.SECONDS.sleep(1);
 			Thread t2 = new Thread(generatorRunnable);
-			TimeUnit.SECONDS.sleep(1);
 			Thread t3 = new Thread(generatorRunnable);
 
 			t1.start();
+			TimeUnit.SECONDS.sleep(1);
 			t2.start();
-			t3.start();
+			TimeUnit.SECONDS.sleep(1);
+                        t3.start();
 
 			t1.join();
 			t2.join();

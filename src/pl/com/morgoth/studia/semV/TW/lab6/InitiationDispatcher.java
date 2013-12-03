@@ -32,6 +32,7 @@ public class InitiationDispatcher implements Runnable {
 		LogManager.getLogger(InitiationDispatcher.class).log(Level.ERROR, "filechannel: {}", fileChannel);
 
 		SelectionKey sk = serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+                LogManager.getLogger(InitiationDispatcher.class).log(Level.DEBUG, "accpetor key {}", sk);
 		sk.attach(new LoggingAcceptor(serverSocket, selector, fileChannel));
 		LogManager.getLogger(InitiationDispatcher.class).log(Level.INFO, "configured");
 
@@ -42,19 +43,20 @@ public class InitiationDispatcher implements Runnable {
 	public void run() {
 		try {
 			while (!Thread.interrupted()) {
-				selector.select();
-				Set<SelectionKey> selectedKeys = selector.selectedKeys();
+                                selector.select();
+                                Set<SelectionKey> selectedKeys = selector.selectedKeys();
 				LogManager.getLogger(InitiationDispatcher.class).log(Level.DEBUG, "selected keys {}", selectedKeys);
 				Iterator<SelectionKey> it = selectedKeys.iterator();
 				while (it.hasNext()) {
 					dispatch(it.next());
 					it.remove();
 				}
-				selectedKeys.clear();
+                                
 			}
 		} catch (IOException e) {
 			LogManager.getLogger(InitiationDispatcher.class).error("run", e);
 		}
+                LogManager.getLogger(InitiationDispatcher.class).log(Level.DEBUG,"initiation dispatcher stopped");
 	}
 
 	private void dispatch(SelectionKey key) {
