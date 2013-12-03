@@ -32,6 +32,7 @@ class LoggingAcceptor implements Runnable, EventHandler {
 		} catch (IOException ex) {
 			LogManager.getLogger(LoggingAcceptor.class).log(Level.ERROR, "", ex);
 		}
+		LogManager.getLogger(LoggingAcceptor.class).log(Level.INFO, "acceptor return");
 	}
 
 	@Override
