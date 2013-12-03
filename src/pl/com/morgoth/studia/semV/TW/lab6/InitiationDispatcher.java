@@ -27,7 +27,8 @@ public class InitiationDispatcher implements Runnable {
 		serverSocket.configureBlocking(false);
 		Path logPath = FileSystems.getDefault().getPath("logFromServer.log");
 
-		FileChannel fileChannel = FileChannel.open(logPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+		FileChannel fileChannel = FileChannel.open(logPath, StandardOpenOption.WRITE,
+				StandardOpenOption.TRUNCATE_EXISTING);
 		LogManager.getLogger(InitiationDispatcher.class).log(Level.ERROR, "filechannel: {}", fileChannel);
 
 		SelectionKey sk = serverSocket.register(selector, SelectionKey.OP_ACCEPT);
