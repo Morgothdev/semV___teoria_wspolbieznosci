@@ -18,7 +18,9 @@ public class LoggingHandler implements Runnable, EventHandler {
 	private final FileChannel fileChannel;
 	private InitiationDispatcher dispatcher;
 
-	public LoggingHandler(SocketChannel socketChannelForClient, FileChannel logFileChannel, InitiationDispatcher dispatcher) throws IOException {
+	public LoggingHandler(SocketChannel socketChannelForClient,
+			FileChannel logFileChannel, InitiationDispatcher dispatcher)
+			throws IOException {
 		this.socket = socketChannelForClient;
 		this.fileChannel = logFileChannel;
 		this.dispatcher = dispatcher;
@@ -35,31 +37,38 @@ public class LoggingHandler implements Runnable, EventHandler {
 	public void run() {
 		try {
 			int readed, wrote;
-			if (socket.socket().getInputStream().available()==0){
+			readed = socket.read(dst);
+			LogManager.getLogger(LoggingHandler.class).log(Level.INFO,
+					"log handler reads {}", readed);
+			if (readed < 0) {
 				closeConnection();
+				return;
 			}
-			while((readed = socket.read(dst))>0){
+			do {
 				if (readed < dst.capacity()) {
 					dst.put(System.lineSeparator().getBytes());
 				}
 				dst.flip();
 				wrote = fileChannel.write(dst);
-				LogManager.getLogger(LoggingHandler.class).log(Level.INFO, "log handler reads {}, wrote {}", readed,
-						wrote);
-			}
+				LogManager.getLogger(LoggingHandler.class).log(Level.INFO,
+						"log handler reads {}, wrote {}", readed, wrote);
+				dst.clear();
+			} while ((readed = socket.read(dst)) > 0);
 		} catch (IOException e) {
 			LogManager.getLogger(LoggingHandler.class).error("run", e);
 		}
 	}
 
 	private void closeConnection() {
-		dispatcher.removeHander(this);	
+		dispatcher.removeHander(this);
 		try {
 			socket.close();
 		} catch (IOException ex) {
-			Logger.getLogger(LoggingHandler.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			Logger.getLogger(LoggingHandler.class.getName()).log(
+					java.util.logging.Level.SEVERE, null, ex);
 		}
-		LogManager.getLogger(LoggingHandler.class).log(Level.DEBUG, "connection to {} closed", socket);
+		LogManager.getLogger(LoggingHandler.class).log(Level.DEBUG,
+				"connection to {} closed", socket);
 	}
 
 	@Override
