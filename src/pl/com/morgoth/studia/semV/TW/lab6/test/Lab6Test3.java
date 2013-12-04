@@ -21,20 +21,29 @@ import pl.com.morgoth.studia.semV.TW.lab6.InitiationDispatcher;
 public class Lab6Test3 implements Runnable {
 
 	private static final long REQUESTS_COUNT = 100000;
-	private static final int SENDERS_COUNT = 10;
+	private static final int SENDERS_COUNT = 1;
 
 	public static void main(String[] args) throws IOException {
+		Thread[] threads = new Thread[SENDERS_COUNT];
 		for (int i = 0; i < SENDERS_COUNT; ++i) {
 			Lab6Test3 runnable = new Lab6Test3();
-			Thread thread = new Thread(runnable);
-			thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			threads[i] = new Thread(runnable);
+			threads[i].setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 				
 				@Override
 				public void uncaughtException(Thread t, Throwable e) {
 					e.printStackTrace();
 				}
 			});
-			thread.start();
+			threads[i].start();
+		}
+		for (int i = 0; i < threads.length; i++) {
+			try {
+				threads[i].join();
+			} catch (InterruptedException e) {
+				LogManager.getLogger(UncaughtExceptionHandler.class).log(
+						Level.ERROR, e);
+			}
 		}
 	}
 

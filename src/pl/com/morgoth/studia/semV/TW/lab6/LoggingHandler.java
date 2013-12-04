@@ -35,8 +35,10 @@ public class LoggingHandler implements Runnable, EventHandler {
 	public void run() {
 		try {
 			int readed, wrote;
-			readed = socket.read(dst);
-			if (readed > 0) {
+			if (socket.socket().getInputStream().available()==0){
+				closeConnection();
+			}
+			while((readed = socket.read(dst))>0){
 				if (readed < dst.capacity()) {
 					dst.put(System.lineSeparator().getBytes());
 				}
@@ -44,10 +46,7 @@ public class LoggingHandler implements Runnable, EventHandler {
 				wrote = fileChannel.write(dst);
 				LogManager.getLogger(LoggingHandler.class).log(Level.INFO, "log handler reads {}, wrote {}", readed,
 						wrote);
-			} else if (readed <= 0) {
-				closeConnection();
 			}
-
 		} catch (IOException e) {
 			LogManager.getLogger(LoggingHandler.class).error("run", e);
 		}
