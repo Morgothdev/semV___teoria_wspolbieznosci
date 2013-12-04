@@ -24,7 +24,7 @@ public class InitiationDispatcher implements Runnable {
 	private Map<EventHandler, SelectionKey> registerHandlers = new HashMap<>();
 	volatile long startingTime = -1;
 	long endTime;
-	
+
 	public void init(int port) throws IOException {
 		selector = Selector.open();
 		Path logPath = FileSystems.getDefault().getPath("logFromServer.log");
@@ -57,8 +57,10 @@ public class InitiationDispatcher implements Runnable {
 				LogManager.getLogger(InitiationDispatcher.class).log(
 						Level.INFO, "dispatcher select");
 				selector.select();
-				if(startingTime<0){
-					startingTime=System.currentTimeMillis();
+				if (startingTime < 0) {
+					startingTime = System.currentTimeMillis();
+					LogManager.getRootLogger()
+							.log(Level.FATAL, "starting time");
 				}
 				Set<SelectionKey> selectedKeys = selector.selectedKeys();
 				LogManager.getLogger(InitiationDispatcher.class).log(
@@ -92,14 +94,16 @@ public class InitiationDispatcher implements Runnable {
 		SelectionKey sk = eventHandler.getHandle().register(selector, key);
 		sk.attach(eventHandler);
 		registerHandlers.put(eventHandler, sk);
+
 	}
 
 	public void removeHander(EventHandler handler) {
 		registerHandlers.remove(handler).cancel();
-		if(registerHandlers.size()==0){
-			endTime=System.currentTimeMillis();
-			LogManager.getRootLogger().log(
-					Level.FATAL, "time of service {} ",endTime-startingTime);
-		}
+
+		endTime = System.currentTimeMillis();
+		LogManager.getRootLogger().log(Level.FATAL, "time of service {} ",
+				endTime - startingTime);
+		System.out.println("czas: " + (endTime - startingTime));
+
 	}
 }

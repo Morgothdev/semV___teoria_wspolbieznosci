@@ -20,9 +20,11 @@ public class FileAppender implements EventHandler {
 	private ExecutorService executor = Executors.newFixedThreadPool(1);
 	private final ByteBuffer dst = ByteBuffer.allocate(500);
 	private final FileChannel fileChannel;
+	private InitiationDispatcher dispatcher;
 
 	public FileAppender(Path path, InitiationDispatcher dispatcher, Pipe pipe)
 			throws IOException {
+		this.dispatcher = dispatcher;
 		this.pipe = pipe;
 		this.pipe.source().configureBlocking(false);
 
@@ -71,4 +73,18 @@ public class FileAppender implements EventHandler {
 		return pipe.source();
 	}
 
+	@Override
+	public boolean isDaemon() {
+		return true;
+	}
+
+	@Override
+	public void shutdown() {
+		try {
+			fileChannel.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		dispatcher.removeHander(this);
+	}
 }

@@ -15,17 +15,17 @@ import org.apache.logging.log4j.LogManager;
 class LoggingAcceptor implements Runnable, EventHandler {
 
 	private final ServerSocketChannel serverSocket;
-	private InitiationDispatcher initiationDispatcher;
+	private InitiationDispatcher dispatcher;
 	private	 Pipe.SinkChannel pipe;
 	
 	public LoggingAcceptor(InitiationDispatcher initiationDispatcher, int portToListening, SinkChannel sinkChannel) throws IOException {
-		this.initiationDispatcher = initiationDispatcher;
+		this.dispatcher = initiationDispatcher;
 		pipe = sinkChannel;
 		serverSocket = ServerSocketChannel.open();
 		serverSocket.socket().bind(new InetSocketAddress(portToListening));
 		serverSocket.configureBlocking(false);
 		
-		this.initiationDispatcher.register(this,SelectionKey.OP_ACCEPT);
+		this.dispatcher.register(this,SelectionKey.OP_ACCEPT);
 
 	}
 
@@ -36,7 +36,7 @@ class LoggingAcceptor implements Runnable, EventHandler {
 			LogManager.getLogger(LoggingAcceptor.class).log(Level.INFO, "acceptor accepts connection: {}",
 					socketChannelForClient);
 			if (socketChannelForClient != null)
-				new LoggingHandler(socketChannelForClient, initiationDispatcher,pipe);
+				new LoggingHandler(socketChannelForClient, dispatcher,pipe);
 		} catch (IOException ex) {
 			LogManager.getLogger(LoggingAcceptor.class).log(Level.ERROR, "", ex);
 		}
@@ -51,5 +51,21 @@ class LoggingAcceptor implements Runnable, EventHandler {
 	@Override
 	public SelectableChannel getHandle() {
 		return serverSocket;
+	}
+
+	@Override
+	public boolean isDaemon() {
+		return false;
+	}
+	
+	@Override
+	public void shutdown() {
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		dispatcher.removeHander(this);
 	}
 }

@@ -8,6 +8,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import org.apache.logging.log4j.Level;
@@ -31,6 +32,13 @@ public class LoggingHandler implements EventHandler {
 		dispatcher.register(this, SelectionKey.OP_READ);
 	}
 
+	void process() {
+		try {
+			TimeUnit.MILLISECONDS.sleep(1000);
+		} catch (InterruptedException e) {
+		}
+	}
+
 	@Override
 	public void handleEvent() {
 		executor.execute(new Runnable() {
@@ -38,6 +46,7 @@ public class LoggingHandler implements EventHandler {
 			@Override
 			public void run() {
 				if (socket.isConnected()) {
+					process();
 					try {
 						int readed, wrote;
 						while ((readed = socket.read(dst)) != 0) {
@@ -88,6 +97,17 @@ public class LoggingHandler implements EventHandler {
 	@Override
 	public SelectableChannel getHandle() {
 		return socket;
+	}
+
+	@Override
+	public boolean isDaemon() {
+		return false;
+	}
+
+	@Override
+	public void shutdown() {
+		closeConnection();
+		dispatcher.removeHander(this);
 	}
 
 }

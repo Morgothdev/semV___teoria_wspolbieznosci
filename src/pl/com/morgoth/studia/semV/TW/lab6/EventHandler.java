@@ -7,4 +7,8 @@ public interface EventHandler {
 	void handleEvent();
 
 	SelectableChannel getHandle();
+	
+	boolean isDaemon();
+	
+	void shutdown();
 }
