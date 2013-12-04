@@ -2,59 +2,75 @@ package pl.com.morgoth.studia.semV.TW.lab6;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.channels.Pipe;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
-public class LoggingHandler implements Runnable, EventHandler {
+public class LoggingHandler implements EventHandler {
 
 	private final SocketChannel socket;
 	private final ByteBuffer dst = ByteBuffer.allocate(500);
-	private final FileChannel fileChannel;
 	private InitiationDispatcher dispatcher;
+	private Pipe.SinkChannel pipe;
+	private ExecutorService executor = Executors.newFixedThreadPool(1);
 
 	public LoggingHandler(SocketChannel socketChannelForClient,
-			FileChannel logFileChannel, InitiationDispatcher dispatcher)
+			InitiationDispatcher dispatcher, Pipe.SinkChannel pipe)
 			throws IOException {
 		this.socket = socketChannelForClient;
-		this.fileChannel = logFileChannel;
 		this.dispatcher = dispatcher;
+		this.pipe = pipe;
 		this.socket.configureBlocking(false);
 		dispatcher.register(this, SelectionKey.OP_READ);
 	}
 
 	@Override
 	public void handleEvent() {
-		run();
-	}
+		executor.execute(new Runnable() {
 
-	@Override
-	public void run() {
-		try {
-			int readed, wrote;
-			while ((readed = socket.read(dst)) != 0) {
-				if (readed > 0) {
-					if (readed < dst.capacity()) {
-						dst.put(System.lineSeparator().getBytes());
+			@Override
+			public void run() {
+				if (socket.isConnected()) {
+					try {
+						int readed, wrote;
+						while ((readed = socket.read(dst)) != 0) {
+							if (readed > 0) {
+								if (readed < dst.capacity()) {
+									dst.put(System.lineSeparator().getBytes());
+								}
+								dst.flip();
+								wrote = pipe.write(dst);
+								LogManager
+										.getLogger(LoggingHandler.class)
+										.log(Level.INFO,
+												"log handler reads {} from {}, wrote {}",
+												readed,
+												socket.socket().getLocalPort(),
+												wrote);
+								dst.clear();
+							} else {
+								LogManager.getLogger(LoggingHandler.class).log(
+										Level.INFO,
+										"log handler reads {} from {}", readed,
+										socket.socket().getLocalPort());
+								closeConnection();
+								return;
+							}
+						}
+					} catch (IOException e) {
+						LogManager.getLogger(LoggingHandler.class).error("run",
+								e);
 					}
-					dst.flip();
-					wrote = fileChannel.write(dst);
-					LogManager.getLogger(LoggingHandler.class).log(Level.INFO,
-							"log handler reads {}, wrote {}", readed, wrote);
-					dst.clear();
-				} else {
-					closeConnection();
-					return;
 				}
 			}
-		} catch (IOException e) {
-			LogManager.getLogger(LoggingHandler.class).error("run", e);
-		}
+		});
 	}
 
 	private void closeConnection() {
