@@ -37,23 +37,21 @@ public class LoggingHandler implements Runnable, EventHandler {
 	public void run() {
 		try {
 			int readed, wrote;
-			readed = socket.read(dst);
-			LogManager.getLogger(LoggingHandler.class).log(Level.INFO,
-					"log handler reads {}", readed);
-			if (readed < 0) {
-				closeConnection();
-				return;
-			}
-			do {
-				if (readed < dst.capacity()) {
-					dst.put(System.lineSeparator().getBytes());
+			while ((readed = socket.read(dst)) != 0) {
+				if (readed > 0) {
+					if (readed < dst.capacity()) {
+						dst.put(System.lineSeparator().getBytes());
+					}
+					dst.flip();
+					wrote = fileChannel.write(dst);
+					LogManager.getLogger(LoggingHandler.class).log(Level.INFO,
+							"log handler reads {}, wrote {}", readed, wrote);
+					dst.clear();
+				} else {
+					closeConnection();
+					return;
 				}
-				dst.flip();
-				wrote = fileChannel.write(dst);
-				LogManager.getLogger(LoggingHandler.class).log(Level.INFO,
-						"log handler reads {}, wrote {}", readed, wrote);
-				dst.clear();
-			} while ((readed = socket.read(dst)) > 0);
+			}
 		} catch (IOException e) {
 			LogManager.getLogger(LoggingHandler.class).error("run", e);
 		}

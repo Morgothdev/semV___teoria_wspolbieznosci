@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.Socket;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -20,8 +21,8 @@ import pl.com.morgoth.studia.semV.TW.lab6.InitiationDispatcher;
  */
 public class Lab6Test3 implements Runnable {
 
-	private static final long REQUESTS_COUNT = 100000;
-	private static final int SENDERS_COUNT = 1;
+	private static final long REQUESTS_COUNT = 70000;
+	private static final int SENDERS_COUNT = 5;
 
 	public static void main(String[] args) throws IOException {
 		Thread[] threads = new Thread[SENDERS_COUNT];
@@ -57,8 +58,9 @@ public class Lab6Test3 implements Runnable {
 					"connected: {}, addr: {}, remote: {}", s2.isConnected(),
 					s2.getLocalAddress(), s2.getRemoteSocketAddress());
 			for (long i = 0; i < REQUESTS_COUNT; ++i) {
-				s2.getOutputStream().write(randomString(500).getBytes());
+				s2.getOutputStream().write(randomString(400).getBytes());
 				s2.getOutputStream().flush();
+				
 			}
 
 			s2.close();
