@@ -28,7 +28,7 @@ public class InitiationDispatcher implements Runnable {
 		selector = Selector.open();
 		Path logPath = FileSystems.getDefault().getPath("logFromServer.log");
 
-		FileChannel fileChannel = FileChannel.open(logPath,
+		FileChannel fileChannel = FileChannel.open(logPath, StandardOpenOption.CREATE,
 				StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
 		LogManager.getLogger(InitiationDispatcher.class).log(Level.ERROR,
 				"filechannel: {}", fileChannel);

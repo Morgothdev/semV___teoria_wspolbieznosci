@@ -14,7 +14,7 @@ import org.apache.logging.log4j.LogManager;
 public class LoggingHandler implements Runnable, EventHandler {
 
 	private final SocketChannel socket;
-	private final ByteBuffer dst = ByteBuffer.allocate(5000);
+	private final ByteBuffer dst = ByteBuffer.allocate(500);
 	private final FileChannel fileChannel;
 	private InitiationDispatcher dispatcher;
 
