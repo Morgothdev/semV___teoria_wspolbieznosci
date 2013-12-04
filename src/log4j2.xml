@@ -9,7 +9,7 @@
 		</File>
 	</Appenders>
 	<Loggers>
-		<Root level="ALL">
+		<Root level="FATAL">
 			<AppenderRef ref="FileAppender" />
 			<AppenderRef ref="Console" />
 		</Root>
