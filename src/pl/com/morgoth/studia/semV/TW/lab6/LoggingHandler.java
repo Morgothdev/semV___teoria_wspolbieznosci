@@ -3,8 +3,8 @@ package pl.com.morgoth.studia.semV.TW.lab6;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Logger;
 
@@ -16,14 +16,14 @@ public class LoggingHandler implements Runnable, EventHandler {
 	private final SocketChannel socket;
 	private final ByteBuffer dst = ByteBuffer.allocate(5000);
 	private final FileChannel fileChannel;
-	private final SelectionKey registerKey;
+	private InitiationDispatcher dispatcher;
 
-	public LoggingHandler(Selector selector, SocketChannel socket, FileChannel fileChannel) throws IOException {
-		this.socket = socket;
-		this.fileChannel = fileChannel;
+	public LoggingHandler(SocketChannel socketChannelForClient, FileChannel logFileChannel, InitiationDispatcher dispatcher) throws IOException {
+		this.socket = socketChannelForClient;
+		this.fileChannel = logFileChannel;
+		this.dispatcher = dispatcher;
 		this.socket.configureBlocking(false);
-		registerKey = this.socket.register(selector, SelectionKey.OP_READ);
-		registerKey.attach(this);
+		dispatcher.register(this, SelectionKey.OP_READ);
 	}
 
 	@Override
@@ -54,13 +54,18 @@ public class LoggingHandler implements Runnable, EventHandler {
 	}
 
 	private void closeConnection() {
-		registerKey.cancel();
+		dispatcher.removeHander(this);	
 		try {
 			socket.close();
 		} catch (IOException ex) {
 			Logger.getLogger(LoggingHandler.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
 		LogManager.getLogger(LoggingHandler.class).log(Level.DEBUG, "connection to {} closed", socket);
+	}
+
+	@Override
+	public SelectableChannel getHandle() {
+		return socket;
 	}
 
 }
