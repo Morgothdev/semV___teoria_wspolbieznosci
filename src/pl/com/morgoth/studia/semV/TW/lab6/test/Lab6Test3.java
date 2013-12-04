@@ -21,7 +21,7 @@ import pl.com.morgoth.studia.semV.TW.lab6.InitiationDispatcher;
  */
 public class Lab6Test3 implements Runnable {
 
-	private static final long REQUESTS_COUNT = 70000;
+	private static final long REQUESTS_COUNT = 10000;
 	private static final int SENDERS_COUNT = 5;
 
 	public static void main(String[] args) throws IOException {
