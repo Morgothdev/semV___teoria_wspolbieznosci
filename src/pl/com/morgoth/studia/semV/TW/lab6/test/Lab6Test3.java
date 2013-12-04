@@ -60,7 +60,6 @@ public class Lab6Test3 implements Runnable {
 			for (long i = 0; i < REQUESTS_COUNT; ++i) {
 				s2.getOutputStream().write(randomString(400).getBytes());
 				s2.getOutputStream().flush();
-				
 			}
 
 			s2.close();

@@ -3,12 +3,11 @@ package pl.com.morgoth.studia.semV.TW.lab6;
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.channels.ClosedChannelException;
-import java.nio.channels.FileChannel;
+import java.nio.channels.Pipe;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -23,18 +22,16 @@ public class InitiationDispatcher implements Runnable {
 	private Selector selector;
 	public static final int LOGGING_SERVER_CONNECTION_PORT = 6000;
 	private Map<EventHandler, SelectionKey> registerHandlers = new HashMap<>();
-	
+
 	public void init(int port) throws IOException {
 		selector = Selector.open();
 		Path logPath = FileSystems.getDefault().getPath("logFromServer.log");
 
-		FileChannel fileChannel = FileChannel.open(logPath, StandardOpenOption.CREATE,
-				StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
-		LogManager.getLogger(InitiationDispatcher.class).log(Level.ERROR,
-				"filechannel: {}", fileChannel);
+		Pipe pipe = Pipe.open();
 
-		new LoggingAcceptor(this, LOGGING_SERVER_CONNECTION_PORT, fileChannel,
-				selector);
+		new LoggingAcceptor(this, LOGGING_SERVER_CONNECTION_PORT, pipe.sink());
+
+		new FileAppender(logPath, this, pipe);
 
 		LogManager.getLogger(InitiationDispatcher.class).log(Level.INFO,
 				"configured");
@@ -85,7 +82,8 @@ public class InitiationDispatcher implements Runnable {
 		TimeUnit.MINUTES.sleep(5);
 	}
 
-	public void register(EventHandler eventHandler, int key) throws ClosedChannelException {
+	public void register(EventHandler eventHandler, int key)
+			throws ClosedChannelException {
 		SelectionKey sk = eventHandler.getHandle().register(selector, key);
 		sk.attach(eventHandler);
 		registerHandlers.put(eventHandler, sk);
