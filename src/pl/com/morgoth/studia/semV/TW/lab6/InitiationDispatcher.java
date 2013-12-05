@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.Level;
@@ -24,6 +26,8 @@ public class InitiationDispatcher implements Runnable {
 	private Map<EventHandler, SelectionKey> registerHandlers = new HashMap<>();
 	volatile long startingTime = -1;
 	long endTime;
+	private ExecutorService executor = Executors.newFixedThreadPool(1);
+
 
 	public void init(int port) throws IOException {
 		selector = Selector.open();
@@ -78,8 +82,14 @@ public class InitiationDispatcher implements Runnable {
 				"initiation dispatcher stopped");
 	}
 
-	private void dispatch(SelectionKey key) {
-		((EventHandler) (key.attachment())).handleEvent();
+	private void dispatch(final SelectionKey key) {
+		executor .execute(new Runnable(){
+
+			@Override
+			public void run() {
+				((EventHandler) (key.attachment())).handleEvent();}
+		});
+		
 	}
 
 	public static void main(String[] args) throws IOException,
