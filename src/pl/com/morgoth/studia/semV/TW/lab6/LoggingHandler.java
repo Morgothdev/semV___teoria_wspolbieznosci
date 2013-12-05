@@ -6,6 +6,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import org.apache.logging.log4j.Level;
@@ -33,9 +34,17 @@ public class LoggingHandler implements Runnable, EventHandler {
 		run();
 	}
 
+	void process() {
+		try {
+			TimeUnit.MILLISECONDS.sleep(100);
+		} catch (InterruptedException w) {
+		}
+	}
+
 	@Override
 	public void run() {
 		try {
+			process();
 			int readed, wrote;
 			while ((readed = socket.read(dst)) != 0) {
 				if (readed > 0) {
