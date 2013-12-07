@@ -31,7 +31,7 @@ public class LoggingHandler implements EventHandler {
 
 	void process() {
 		try {
-			TimeUnit.MILLISECONDS.sleep(1);
+			TimeUnit.MILLISECONDS.sleep(R.DELAY);
 		} catch (InterruptedException e) {
 		}
 	}

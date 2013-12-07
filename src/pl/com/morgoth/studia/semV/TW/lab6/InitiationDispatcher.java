@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +26,6 @@ public class InitiationDispatcher implements Runnable {
 	volatile long startingTime = -1;
 	long endTime;
 	private ExecutorService executor = Executors.newFixedThreadPool(1);
-
 
 	public void init(int port) throws IOException {
 		selector = Selector.open();
@@ -82,21 +80,25 @@ public class InitiationDispatcher implements Runnable {
 				"initiation dispatcher stopped");
 	}
 
+	
 	private void dispatch(final SelectionKey key) {
-		executor .execute(new Runnable(){
+		if (R.USE_EXECUTORS) {
+			executor.execute(new Runnable() {
+				@Override
+				public void run() {
+					((EventHandler) (key.attachment())).handleEvent();
+				}
+			});
+		} else {
+			((EventHandler) (key.attachment())).handleEvent();
+		}
 
-			@Override
-			public void run() {
-				((EventHandler) (key.attachment())).handleEvent();}
-		});
-		
 	}
 
 	public static void main(String[] args) throws IOException,
 			InterruptedException {
 		InitiationDispatcher dispatcher = new InitiationDispatcher();
 		dispatcher.init(LOGGING_SERVER_CONNECTION_PORT);
-		TimeUnit.MINUTES.sleep(5);
 	}
 
 	public void register(EventHandler eventHandler, int key)
