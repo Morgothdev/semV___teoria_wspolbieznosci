@@ -2,6 +2,7 @@ package pl.com.morgoth.studia.semV.TW.lab6;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.Pipe;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
@@ -22,24 +23,47 @@ public class LoggingHandler implements EventHandler {
 	public LoggingHandler(SocketChannel socketChannelForClient,
 			InitiationDispatcher dispatcher, Pipe.SinkChannel pipe)
 			throws IOException {
+		LogManager.getLogger(LoggingHandler.class).info("costr start");
 		this.socket = socketChannelForClient;
 		this.dispatcher = dispatcher;
 		this.pipe = pipe;
 		this.socket.configureBlocking(false);
 		dispatcher.register(this, SelectionKey.OP_READ);
+		LogManager.getLogger(LoggingHandler.class).info("contructor ends");
 	}
 
 	void process() {
 		try {
-			TimeUnit.MILLISECONDS.sleep(R.DELAY);
+			TimeUnit.MILLISECONDS.sleep(R.PROCESS_DELAY);
 		} catch (InterruptedException e) {
 		}
 	}
 
 	@Override
 	public void handleEvent() {
-
+		LogManager.getLogger(LoggingHandler.class).info("handle event");
 		if (socket.isConnected()) {
+
+			if (dst.position() > 0) {
+				try {
+					pipe.write(dst);
+					dst.compact();
+					if (dst.position() != 0) {
+						LogManager.getLogger(LoggingHandler.class).log(
+								Level.ERROR, "head wrote not enought");
+						return;
+					} else {
+						LogManager.getLogger(LoggingHandler.class).log(
+								Level.ERROR, "remaining data wrote!");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				LogManager.getLogger(LoggingHandler.class).log(Level.ERROR,
+						"wrote not enought");
+				return;
+			}
+
 			process();
 			try {
 				int readed, wrote;
@@ -50,11 +74,18 @@ public class LoggingHandler implements EventHandler {
 						}
 						dst.flip();
 						wrote = pipe.write(dst);
-						LogManager.getLogger(LoggingHandler.class).log(
-								Level.INFO,
-								"log handler reads {} from {}, wrote {}",
-								readed, socket.socket().getLocalPort(), wrote);
-						dst.clear();
+						dst.compact();
+						if (dst.position() != 0) {
+							LogManager.getLogger(LoggingHandler.class).log(
+									Level.ERROR, "wrote not enought");
+							break;
+						}
+						LogManager
+								.getLogger(LoggingHandler.class)
+								.log(Level.INFO,
+										"log handler reads {} from {}, wrote {}, remaining {}",
+										readed, socket.socket().getPort(),
+										wrote, dst.position());
 					} else {
 						LogManager.getLogger(LoggingHandler.class).log(
 								Level.INFO, "log handler reads {} from {}",
@@ -66,7 +97,19 @@ public class LoggingHandler implements EventHandler {
 			} catch (IOException e) {
 				LogManager.getLogger(LoggingHandler.class).error("run", e);
 			}
+		} else {
+			LogManager.getLogger(LoggingHandler.class).error(
+					"socket is not connected");
+			closeConnection();
+			return;
 		}
+		// if (R.USE_EXECUTORS) {
+		// try {
+		// dispatcher.register(this, SelectionKey.OP_READ);
+		// } catch (ClosedChannelException e) {
+		// e.printStackTrace();
+		// }
+		// }
 	}
 
 	private void closeConnection() {
