@@ -27,7 +27,7 @@ public class InitiationDispatcher implements Runnable {
 
 	private Selector selector;
 	public static final int LOGGING_SERVER_CONNECTION_PORT = 6000;
-	private Map<EventHandler, SelectionKey> registerHandlers = new HashMap<>();
+	private Map<EventHandler, SelectionKey> registerHandlers = new HashMap<EventHandler, SelectionKey>();
 	Set<SelectionKey> deativatedHandlers = Collections
 			.newSetFromMap(new ConcurrentHashMap<SelectionKey, Boolean>());
 
@@ -75,7 +75,7 @@ public class InitiationDispatcher implements Runnable {
 							.log(Level.FATAL, "starting time");
 				}
 				Set<SelectionKey> selectedKeys = selector.selectedKeys();
-				Set<EventHandler> selectedHandlers = new HashSet<>();
+				Set<EventHandler> selectedHandlers = new HashSet<EventHandler>();
 				for (SelectionKey key : selectedKeys) {
 					selectedHandlers.add((EventHandler) key.attachment());
 				}
