@@ -2,3 +2,6 @@
 /logs
 /bin
 *.log
+/nbproject/private/
+/build/
+/dist/
