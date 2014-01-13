@@ -1,7 +1,9 @@
 -module(zad1).
+-export([start/0, stop/0]).
+-export([wait/0, signal/0]).
 
 
-init() -> 
+start() -> 
     register(mutex, spawn(fun() -> free() end)).
 
 
@@ -12,15 +14,27 @@ wait() ->
     mutex ! {wait, self()},
     receive ok -> ok end.
 
+signal() ->
+    mutex ! {signal, self()}, ok.
 
 free() ->
     receive
         {wait, Pid} ->
             Pid ! ok, busy(Pid);
-        stop -> exit()
+        stop -> terminate()
     end.
 
 
 busy(Pid) ->
     receive
-        {signal, Pid}
+        {signal, Pid} -> free()
+    end.
+
+terminate() ->
+    receive
+        {wait, Pid} ->
+        exit(Pid, kill),
+        terminate()
+    after
+        0 -> ok
+    end.
