@@ -34,11 +34,11 @@ reply(From, Reply) ->
 init(HandlersList) ->
     loop(initialize(HandlersList)).
 
-initialize([]) -> [].
+initialize([]) -> [];
 initialize([{Handler, InitData} | Rest]) ->
     [{Handler, Handler:init(InitData)} | initialize(Rest)].
 
-terminate([]) -> [].
+terminate([]) -> [];
 terminate([{Handler, Data} | Rest]) ->
     [{Handler, Handler:terminate(Data)} | terminate(Rest)].
 
@@ -52,7 +52,7 @@ loop(HandlersList) ->
     end.
 
 handle_request({register_handler, Handler, InitData}, HandlersList) ->
-    {ok, [{Handler, Handler:init(InitData)} | HandlersList]}.
+    {ok, [{Handler, Handler:init(InitData)} | HandlersList]};
 
 handle_request({unregister_handler, Handler}, HandlersList) ->
     case lists:keysearch(Handler, 1, HandlersList) of
@@ -66,6 +66,6 @@ handle_request({unregister_handler, Handler}, HandlersList) ->
 handle_request({publish, Event}, HandlersList) ->
     {ok, send_event(Event, HandlersList)}.
 
-send_event(_Event, []) -> [].
+send_event(_Event, []) -> [];
 send_event(Event, [{Handler, Data} | Rest]) ->
     [{Handler, Handler:handle_event(Event,Data)} | send_event(Event, Rest)].
