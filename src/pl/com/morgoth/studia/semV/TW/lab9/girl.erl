@@ -3,15 +3,15 @@
 -module(girl).
 -export([wakeGirl/0, giveHerChocolate/0, takeHerForWalk/0, giveHerRose/0, putHerToSleep/0]).
 
-wakeGirl() -> register(girl, spawn(fun() -> is(20) end)).
+wakeGirl() -> register(girl, spawn(fun() -> is(20) end)), girlWakeUp.
 
-giveHerChocolate() -> girl ! chocolate, ok.
+giveHerChocolate() -> girl ! chocolate, gave.
 
 takeHerForWalk() -> girl ! walk, taken.
 
-giveHerRose() -> girl ! rose, gived.
+giveHerRose() -> girl ! rose, gave.
 
-putHerToSleep() -> girl ! sleep, girlSleep.
+putHerToSleep() -> girl ! sleep, girlIsSleeping.
 
 is(HappyLevel) ->
     io:format("~p happy~n",[HappyLevel]),
@@ -41,7 +41,7 @@ gettedRose(HappyLevel, ReturnFunction) ->
     receive
         rose -> io:format("Tyle kwiatow? "),
         if
-            HappyLevel >= 0 -> io:format("Cos masz na sumieniu.... Wiem! Zdradzasz mnie! *&^%$#@ !~n"), foched(30);
+            HappyLevel >= 0 -> io:format("Cos masz na sumieniu.... Wiem! Zdradzasz mnie! *&^%$#@ !~n"), foched(-25);
             HappyLevel < 0 -> io:format("Daj sobie spokoj z tymi badylami! Koniec z nami!~n"), divorce()
         end
         after 1000 -> ReturnFunction(HappyLevel)
