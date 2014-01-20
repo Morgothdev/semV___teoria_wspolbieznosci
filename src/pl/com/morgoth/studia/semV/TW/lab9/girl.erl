@@ -57,7 +57,11 @@ areOnWalk(HappyLevel) ->
         
 foched(AngryLevel) ->
     io:format("~p angry~n",[AngryLevel]),
-    if AngryLevel < -30 -> divorce(); true -> ok end,
+    if 
+		AngryLevel < -30 -> divorce();
+		AngryLevel > 0 -> is(AngryLevel);
+		true -> ok 
+	end,
     receive
         chocolate -> io:format("Hmm...~n"), eatingChocolate(AngryLevel+3, fun(X) -> foched(X) end);
         rose -> io:format("Mhmm...~n"), gettedRose(AngryLevel +4, fun(X) -> foched(X) end)
