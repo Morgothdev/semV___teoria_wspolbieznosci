@@ -1,0 +1,13 @@
+/bin
+/logs
+*.log
+/build/
+/dist/
+*.beam
+/nbproject*
+.meta*
+.set*
+.clas*
+.proj*
+
+
